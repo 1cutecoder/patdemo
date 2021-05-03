@@ -3,7 +3,6 @@ void K_Reverse( List L, int K ){
     int count = 1;
     new = L -> Next;
     old=new ->Next;
-    
     while(count < K){
         temp = old ->Next;
         old ->Next = new;
