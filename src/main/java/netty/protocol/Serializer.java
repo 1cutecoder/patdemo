@@ -15,7 +15,7 @@ public interface Serializer {
 
     <T> byte[] serializer(T object);
 
-    enum Algorithom implements Serializer {
+    enum Algorithm implements Serializer {
         Java {
             @Override
             public <T> T deSerializer(Class<T> clazz, byte[] bytes) {

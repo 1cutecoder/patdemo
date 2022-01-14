@@ -5,6 +5,9 @@
     <groupId>cute.coder</groupId>
     <artifactId>atguigu</artifactId>
     <packaging>pom</packaging>
+    <modules>
+        <module>nettydemo</module>
+    </modules>
     <dependencies>
         <dependency>
             <groupId>cglib</groupId>
