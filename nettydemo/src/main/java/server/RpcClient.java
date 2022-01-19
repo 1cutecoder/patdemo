@@ -2,12 +2,14 @@ package server;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
+import message.RpcRequestMessage;
 import protocol.MessageCodecSharable;
 import protocol.ProtocolFrameDecoder;
 import server.handler.RpcResponseMessageHandler;
@@ -39,6 +41,17 @@ public class RpcClient {
                 }
             });
             Channel channel = bootstrap.connect(new InetSocketAddress("localhost", 8080)).sync().channel();
+            ChannelFuture future = channel.writeAndFlush(new RpcRequestMessage(
+                    1,
+                    "server.service.HelloService",
+                    "sayHello",
+                    String.class, new Class[]{String.class},
+                    new Object[]{"张三"}
+            ));
+            future.addListener(promise->{
+                System.out.println("promise = " + promise);
+               log.debug("{}",promise.isSuccess());
+            });
             channel.closeFuture().sync();
         } catch (InterruptedException e) {
             log.debug("client error exception:{}", e.toString());

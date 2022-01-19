@@ -1,12 +1,14 @@
 package message;
 
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
  * @author yihang
  */
-@Getter
+@Data
 @ToString(callSuper = true)
 public class RpcRequestMessage extends Message {
 

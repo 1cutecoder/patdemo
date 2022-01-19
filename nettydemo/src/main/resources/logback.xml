@@ -20,12 +20,21 @@
     <!--<logger name="org.springframework.security.web" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>-->
-    <logger name="netty" level="debug" additivity="false">
+    <logger name="protocol" level="debug" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
-   <!-- <logger name="io.netty.handler.logging.LoggingHandler" level="debug" additivity="false">
+    <logger name="server" level="debug" additivity="false">
         <appender-ref ref="STDOUT"/>
-    </logger>-->
+    </logger>
+    <logger name="source" level="debug" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="server" level="debug" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <!-- <logger name="io.netty.handler.logging.LoggingHandler" level="debug" additivity="false">
+         <appender-ref ref="STDOUT"/>
+     </logger>-->
     <root level="ERROR">
         <appender-ref ref="STDOUT"/>
     </root>

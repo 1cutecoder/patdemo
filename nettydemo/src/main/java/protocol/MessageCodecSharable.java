@@ -1,5 +1,6 @@
 package protocol;
 
+import config.Config;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -21,6 +22,7 @@ public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf,Message>
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Message msg, List<Object> outList) throws Exception {
+        log.debug("MessageCodecSharable encode start param:{}",msg);
         ByteBuf out = ctx.alloc().buffer();
         //magic num
         out.writeBytes(new byte[]{1,2,3,4});
@@ -29,15 +31,16 @@ public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf,Message>
         //序列化方式 0 jdk 1 json
         out.writeByte(0);
         //指令类型
-        out.writeByte(msg.getMessageType());
+        out.writeByte(Config.getSerializerAlgorithm().ordinal());
         out.writeInt(msg.getSequenceId());
         //对齐用 2的整数倍
         out.writeByte(0xff);
-        byte[] bytes = Serializer.Algorithm.Java.serializer(msg);
+        byte[] bytes = Config.getSerializerAlgorithm().serializer(msg);
         //7.长度
         out.writeInt(bytes.length);
         out.writeBytes(bytes);
         outList.add(out);
+        log.debug("MessageCodecSharable encode end param:{} outlist{}",msg,outList.toString());
     }
 
     @Override
@@ -51,9 +54,7 @@ public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf,Message>
         int length = in.readInt();
         byte[] content = new byte[length];
         in.readBytes(content,0,length); Message message = null;
-        if (serializerAlgorithm == 0) {
-            message = Serializer.Algorithm.Java.deSerializer(Message.class, content);
-        }
+        message = Config.getSerializerAlgorithm().deSerializer(Message.getMessageClass(message.getMessageType()), content);
         log.debug("magicNum:{},version:{},serializerAlgorithm:{},messageType:{},sequenceId:{},length:{}",magicNum,version,serializerAlgorithm,messageType,sequenceId,length);
         log.debug("message:{}",message);
         out.add(message);
