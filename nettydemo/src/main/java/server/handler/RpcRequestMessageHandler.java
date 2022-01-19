@@ -34,4 +34,26 @@ public class RpcRequestMessageHandler extends SimpleChannelInboundHandler<RpcReq
         log.debug("channelRead0 before  writeAndFlush:{}",rpcResponseMessage);
         ctx.writeAndFlush(rpcResponseMessage);
     }
+
+    public static void main(String[] args) {
+        RpcResponseMessage rpcResponseMessage = new RpcResponseMessage();
+        RpcRequestMessage msg = new RpcRequestMessage(
+                1,
+                "server.service.HelloService",
+                "sayHello",
+                String.class, new Class[]{String.class},
+                new Object[]{"张三"}
+        );
+        try {
+            HelloService service = (HelloService) ServiceFactory.getService(Class.forName(msg.getInterfaceName()));
+            Method method = service.getClass().getMethod(msg.getMethodName(), msg.getParameterTypes());
+            Object invoke = method.invoke(service, msg.getParameterValue());
+            rpcResponseMessage.setReturnValue(invoke);
+        } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+            log.debug("error {}",e.toString());
+            rpcResponseMessage.setExceptionValue(e);
+        }
+        System.out.println("rpcResponseMessage = " + rpcResponseMessage);
+    }
 }

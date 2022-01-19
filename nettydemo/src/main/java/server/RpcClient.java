@@ -1,10 +1,9 @@
 package server;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
@@ -38,6 +37,13 @@ public class RpcClient {
                     ch.pipeline().addLast(LOOGING_HANDLER);
                     ch.pipeline().addLast(messageCodecSharable);
                     ch.pipeline().addLast(rpcResponseHandler);
+                    ch.pipeline().addLast(new ChannelInboundHandlerAdapter(){
+                        @Override
+                        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+                            log.debug("{}",msg);
+                            System.out.println("msg = " + msg);
+                        }
+                    });
                 }
             });
             Channel channel = bootstrap.connect(new InetSocketAddress("localhost", 8080)).sync().channel();
@@ -49,8 +55,8 @@ public class RpcClient {
                     new Object[]{"张三"}
             ));
             future.addListener(promise->{
-                System.out.println("promise = " + promise);
                log.debug("{}",promise.isSuccess());
+               log.debug("{}",promise.cause().toString());
             });
             channel.closeFuture().sync();
         } catch (InterruptedException e) {

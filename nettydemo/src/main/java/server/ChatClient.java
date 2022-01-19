@@ -45,7 +45,7 @@ public class ChatClient {
                     ch.pipeline().addLast(new ProtocolFrameDecoder());
                     ch.pipeline().addLast(LOOGING_HANDLER);
                     ch.pipeline().addLast(messageCodecSharable);
-                    ch.pipeline().addLast(new IdleStateHandler(0,5,0));
+                    ch.pipeline().addLast(new IdleStateHandler(0,15,0));
                     //入站和出站处理器
                     ch.pipeline().addLast(new ChannelDuplexHandler(){
                         @Override
