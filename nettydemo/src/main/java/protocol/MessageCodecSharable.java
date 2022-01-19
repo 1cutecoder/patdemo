@@ -29,9 +29,9 @@ public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf,Message>
         //version
         out.writeByte(1);
         //序列化方式 0 jdk 1 json
-        out.writeByte(0);
-        //指令类型
         out.writeByte(Config.getSerializerAlgorithm().ordinal());
+        //指令类型
+        out.writeByte(msg.getMessageType());
         out.writeInt(msg.getSequenceId());
         //对齐用 2的整数倍
         out.writeByte(0xff);
@@ -53,8 +53,11 @@ public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf,Message>
         in.readByte();
         int length = in.readInt();
         byte[] content = new byte[length];
-        in.readBytes(content,0,length); Message message = null;
-        message = Config.getSerializerAlgorithm().deSerializer(Message.getMessageClass(message.getMessageType()), content);
+        in.readBytes(content,0,length);
+        Serializer.Algorithm algorithm = Config.getSerializerAlgorithm();
+        Message message = null;
+        Class<? extends Message> messageClass = Message.getMessageClass(messageType);
+        message = algorithm.deSerializer(messageClass, content);
         log.debug("magicNum:{},version:{},serializerAlgorithm:{},messageType:{},sequenceId:{},length:{}",magicNum,version,serializerAlgorithm,messageType,sequenceId,length);
         log.debug("message:{}",message);
         out.add(message);

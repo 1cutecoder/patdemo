@@ -1,14 +1,11 @@
 package message;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 /**
- * @author yihang
+ * @author zcl
  */
-@Data
+@Getter
 @ToString(callSuper = true)
 public class RpcRequestMessage extends Message {
 
@@ -33,7 +30,15 @@ public class RpcRequestMessage extends Message {
      */
     private Object[] parameterValue;
 
-    public RpcRequestMessage(int sequenceId, String interfaceName, String methodName, Class<?> returnType, Class[] parameterTypes, Object[] parameterValue) {
+    public RpcRequestMessage() {
+    }
+
+    public RpcRequestMessage(int sequenceId,
+                             String interfaceName,
+                             String methodName,
+                             Class<?> returnType,
+                             Class[] parameterTypes,
+                             Object[] parameterValue) {
         super.setSequenceId(sequenceId);
         this.interfaceName = interfaceName;
         this.methodName = methodName;

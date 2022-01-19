@@ -1,11 +1,10 @@
 package message;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+ import com.fasterxml.jackson.annotation.JsonProperty;
+ import lombok.*;
 
 /**
- * @author yihang
+ * @author zcl
  */
 @Data
 @ToString(callSuper = true)
@@ -13,10 +12,12 @@ public class RpcResponseMessage extends Message {
     /**
      * 返回值
      */
+    @JsonProperty("returnValue")
     private Object returnValue;
     /**
      * 异常值
      */
+    @JsonProperty("exceptionValue")
     private Exception exceptionValue;
 
     @Override

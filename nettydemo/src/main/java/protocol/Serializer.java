@@ -1,9 +1,8 @@
 package protocol;
 
 
-import javafx.scene.control.IndexRange;
-import javafx.scene.paint.Color;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 
@@ -55,6 +54,7 @@ public interface Serializer {
             @Override
             public <T> T deSerializer(Class<T> clazz, byte[] bytes) {
                 ObjectMapper mapper = new ObjectMapper();
+                mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
                 T t = null;
                 try {
                     t = mapper.readValue(bytes, clazz);
@@ -70,6 +70,8 @@ public interface Serializer {
                 byte[] bytes = new byte[0];
                 try {
                     bytes = mapper.writeValueAsBytes(object);
+                    String s = mapper.writeValueAsString(object);
+                    System.out.println("s = " + s);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
