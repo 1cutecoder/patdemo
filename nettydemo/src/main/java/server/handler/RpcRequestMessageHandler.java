@@ -17,6 +17,7 @@ import java.lang.reflect.Method;
  * @date 2022/1/19 9:32
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class RpcRequestMessageHandler extends SimpleChannelInboundHandler<RpcRequestMessage> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcRequestMessage msg) {

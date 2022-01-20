@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2022/1/19 9:32
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class RpcResponseMessageHandler extends SimpleChannelInboundHandler<RpcResponseMessage> {
 
     public static final Map<Integer, Promise<Object>> PROMISES = new ConcurrentHashMap<>();
