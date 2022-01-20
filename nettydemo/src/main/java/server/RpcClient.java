@@ -3,7 +3,6 @@ package server;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
@@ -54,10 +53,6 @@ public class RpcClient {
                     String.class, new Class[]{String.class},
                     new Object[]{"张三"}
             ));
-            future.addListener(promise->{
-               log.debug("{}",promise.isSuccess());
-               log.debug("{}",promise.cause().toString());
-            });
             channel.closeFuture().sync();
         } catch (InterruptedException e) {
             log.debug("client error exception:{}", e.toString());
