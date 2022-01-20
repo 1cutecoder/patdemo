@@ -6,6 +6,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.util.concurrent.DefaultPromise;
 import lombok.extern.slf4j.Slf4j;
 import message.RpcRequestMessage;
 import net.sf.cglib.proxy.Proxy;
@@ -83,7 +84,14 @@ public class RpcClientManager {
                     arguments
             );
             getChannel().writeAndFlush(message);
-            return null;
+            DefaultPromise<Object> promise = new DefaultPromise<>(getChannel().eventLoop());
+            RpcResponseMessageHandler.PROMISES.put(sequenceId,promise);
+            promise.await();
+            if (promise.isSuccess()) {
+                return promise.getNow();
+            }else {
+                throw new RuntimeException(promise.cause());
+            }
         });
         String s = helloService.sayHello("zhangsan");
         System.out.println("s = " + s);   }

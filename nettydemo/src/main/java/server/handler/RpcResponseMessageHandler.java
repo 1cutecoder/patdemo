@@ -23,7 +23,7 @@ public class RpcResponseMessageHandler extends SimpleChannelInboundHandler<RpcRe
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcResponseMessage msg) throws Exception {
         log.debug("{}:", msg);
-       /* Promise<Object> promise = PROMISES.get(msg.getSequenceId());
+        Promise<Object> promise = PROMISES.get(msg.getSequenceId());
         if (promise == null) {
             throw new RuntimeException("PROMISES.get(msg.getSequenceId()) is null");
         }
@@ -33,7 +33,7 @@ public class RpcResponseMessageHandler extends SimpleChannelInboundHandler<RpcRe
             promise.setFailure(exceptionValue);
             return;
         }
-        promise.setSuccess(returnValue);*/
+        promise.setSuccess(returnValue);
         log.debug("RpcResponseMessageHandler channelRead0 start:{}", msg);
     }
 }
